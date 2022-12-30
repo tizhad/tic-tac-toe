@@ -1,0 +1,47 @@
+{{#if this.loadingDisplay}}
+  <div class='d-flex justify-content-center'>
+    <div class='spinner-grow text-info m-auto spinner' role='status'>
+      <span class='sr-only'>Loading...</span>
+    </div>
+  </div>
+{{/if}}
+{{#if this.isFormEnable}}
+  <div>
+    <form {{on 'submit' this.onSubmit}}>
+      <div class='form-group'>
+        <label for='name'>Your Name</label>
+        <Input @value={{this.player}} class='form-control' />
+        <small class='form-text text-muted'>This name will show in the game!</small>
+      </div>
+      <button
+        type='submit'
+        class='btn w-100 bg-info'
+        disabled={{this.disableSubmit}}
+      >Play</button>
+    </form>
+  </div>
+{{/if}}
+
+{{#if this.isGameReady}}
+  <div id="board">
+    <h4>You play as : <strong>{{this.playerGame.play_as}}</strong></h4>
+    <div class='game--container' {{on 'click' this.onSquareClick}}>
+      <div data-row='0' data-col='0' class='cell' id='0'></div>
+      <div data-row='0' data-col='1' class='cell' id='1'></div>
+      <div data-row='0' data-col='2' class='cell' id='2'></div>
+      <div data-row='1' data-col='0' class='cell' id='3'></div>
+      <div data-row='1' data-col='1' class='cell' id='4'></div>
+      <div data-row='1' data-col='2' class='cell' id='5'></div>
+      <div data-row='2' data-col='0' class='cell' id='6'></div>
+      <div data-row='2' data-col='1' class='cell' id='7'></div>
+      <div data-row='2' data-col='2' class='cell' id='8'></div>
+    </div>
+  </div>
+{{/if}}
+
+{{#if this.result}}
+  <div>
+    <h1>{{this.result}}</h1>
+    <button class='btn w-100 bg-info' onclick={{this.restart}}>Play Again</button>
+  </div>
+{{/if}}
