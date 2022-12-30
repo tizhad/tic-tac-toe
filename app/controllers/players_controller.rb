@@ -7,30 +7,28 @@ class PlayersController < ApplicationController
   def show
     @player = Player.find(params[:id])
     render json: @player
-    sort
   end
 
   def create ()
-    @player = Player.create(name: params[:name], status:'waiting')
-    render json: @player
+    @player = Player.create(name: params[:name], status: 'waiting')
     match_making
+    render json: @player
   end
 
   def update ()
-    
   end
 
   def match_making()
-    game = Array.new()
-    waitingList = Array.new(Player.where(:status => 'waiting'))
-    waitingList.map do |player|
-      if game.length < 2
-      end
-      game.push(player)
-      if game.length === 2
-        Game.create(player1: game[0].id, player2: game[1].id, result:'', status: 'in-progress', turn: 'X')
-        Player.
-        game = []
+    players = Player.where(:status => 'waiting').order(updated_at: :asc)
+    pairs = players.each_slice(2).to_a
+    pairs.each do |pair|
+      if pair.length == 2
+        Game.create(
+          player1: players[0].id,
+          player2: players[1].id,
+          board: [['E','E','E'],['E','E','E'],['E','E','E']].to_json,
+          result: '', status: 'in-progress', turn: players[0].id)
+        players.update(status: 'playing')
       end
     end
   end
