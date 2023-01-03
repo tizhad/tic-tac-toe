@@ -57,4 +57,19 @@ export default class ApiService extends Service {
     });
     return response.json();
   }
+
+  updateExistingPlayer = async function () {
+    const cookies = document.cookie.split(';')
+    const playerID = cookies[0].split('=')[1];
+    const response = await fetch(`http://127.0.0.1:3000/players/${playerID}`, {
+      method: 'PUT',
+      mode: 'cors',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(playerID),
+    });
+    return response.json();
+  }
 }
