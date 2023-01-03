@@ -66,6 +66,20 @@ export default class MyFormComponet extends Component {
             ? (document.getElementById(i).innerText = '')
             : (document.getElementById(i).innerText = boardValues[i]);
         }
+        if (res.result >= 0) {
+          switch (res.result) {
+            case 1:
+              this.result = 'WINNER : X';
+              break;
+            case 2:
+              this.result = 'WINNER : O';
+              break;
+            case 0:
+              this.result = 'DRAW';
+              break;
+          }
+          clearInterval(this.intervId);
+        }
       });
     }, 1000);
   }
@@ -77,24 +91,17 @@ export default class MyFormComponet extends Component {
     const clickedCol = parseInt(clickedSquare.getAttribute('data-col'));
     // Update related item in the board
     this.board[clickedRow][clickedCol] = playAs;
-    this.api.updateGameBoard(this.playerGame, this.board).then((res) => {
-      switch (res.result) {
-        case 1:
-          this.result = 'WINNER : X';
-          break;
-        case 2:
-          this.result = 'WINNER : O';
-          break;
-        case 0:
-          this.result = 'DRAW';
-          break;
-      }
-    });
+    this.api.updateGameBoard(this.playerGame, this.board);
   }
   @action restart() {
-    this.isFormEnable = true;
-    this.isGameReady = false;
-    this.result = null;
-    //clear cookie // start over
+    if (document.cookie) {
+      this.loadingDisplay = true;
+      this.isGameReady = false;
+      this.result = null;
+      this.api.updateExistingPlayer().then((res) => {
+        console.log(res);
+        this.searchGame();
+      });
+    }
   }
 }
