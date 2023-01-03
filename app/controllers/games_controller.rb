@@ -22,6 +22,7 @@ class GamesController < ApplicationController
 
   def show
     @game = Game.find(params[:id])
+    result = check_game_result(@game)
     if !@game
       render json:{
         status: 'no game'
@@ -35,6 +36,7 @@ class GamesController < ApplicationController
       status: @game.status,
       board: @game.board,
       created_at: @game.created_at,
+      result: result
     }
   end
 
